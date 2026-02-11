@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,7 +8,6 @@ import { useToast } from "@/components/ui/use-toast";
 export default function Home() {
     const [passcode, setPasscode] = useState("");
     const [isJoining, setIsJoining] = useState(false);
-    const router = useRouter();
     const { toast } = useToast();
 
     useEffect(() => {
