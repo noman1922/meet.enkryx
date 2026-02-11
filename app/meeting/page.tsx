@@ -36,7 +36,22 @@ export default function MeetingPage() {
 
         const callInstance = videoClient.call("default", "enkryx-office");
 
-        callInstance.join({ create: true }).then(() => {
+        callInstance.join({
+            create: true,
+            data: {
+                settings_override: {
+                    audio: {
+                        echo_cancellation: true,
+                        noise_suppression: true,
+                        auto_gain_control: true,
+                    } as any,
+                    video: {
+                        camera_facing: "front",
+                        target_resolution: { width: 1280, height: 720 },
+                    },
+                },
+            },
+        }).then(() => {
             // Auto-enable camera and mic
             callInstance.camera.enable();
             callInstance.microphone.enable();
