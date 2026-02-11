@@ -50,7 +50,7 @@ export default function Home() {
                 localStorage.setItem("stream_userName", data.userName);
 
                 // Hard redirect to be safe
-                window.location.href = "/meeting";
+                window.location.assign("/meeting");
             } else {
                 const errorMsg = data.error || data.details || "Access Denied";
                 console.error("Join rejected:", errorMsg);
