@@ -89,4 +89,3 @@ const MeetingSetup = ({
 };
 
 export default MeetingSetup;
-//image
