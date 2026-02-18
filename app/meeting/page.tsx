@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { StreamVideo, StreamVideoClient, Call, StreamCall, StreamTheme } from "@stream-io/video-react-sdk";
+import { StreamVideo, StreamVideoClient, Call, StreamCall, StreamTheme, CallingState } from "@stream-io/video-react-sdk";
 import Loader from "@/components/Loader";
 import MeetingRoom from "@/components/MeetingRoom";
 
@@ -47,7 +47,11 @@ export default function MeetingPage() {
         });
 
         return () => {
-            callInstance.leave();
+            if (callInstance.state.callingState !== CallingState.LEFT) {
+                callInstance.leave().catch((err) => {
+                    console.error("Error leaving call:", err);
+                });
+            }
             videoClient.disconnectUser();
         };
     }, [router]);
