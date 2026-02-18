@@ -8,6 +8,7 @@ import {
   PaginatedGridLayout,
   SpeakerLayout,
   useCallStateHooks,
+  useCall,
 } from '@stream-io/video-react-sdk';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Users, Volume2 } from 'lucide-react';
@@ -15,7 +16,6 @@ import { Users, Volume2 } from 'lucide-react';
 import Loader from './Loader';
 import EndCallButton from './EndCallButton';
 import { cn } from '@/lib/utils';
-import { useCall } from '@stream-io/video-react-sdk';
 
 
 
@@ -60,7 +60,7 @@ const MeetingRoom = () => {
 
         <CallStatsButton />
 
-        {speakers && speakers.length > 0 && (
+        {speakers && (
           <div className="relative group">
             <button
               onClick={() => setShowSpeakerMenu((prev) => !prev)}
@@ -71,24 +71,28 @@ const MeetingRoom = () => {
             </button>
 
             {showSpeakerMenu && (
-              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-dark-1 border border-dark-3 rounded-lg p-2 shadow-xl min-w-[200px]">
+              <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-dark-1 border border-dark-3 rounded-lg p-2 shadow-xl min-w-[200px] z-50">
                 <p className="text-xs text-gray-400 mb-2 px-2">Select Speaker</p>
                 <div className="flex flex-col gap-1">
-                  {speakers.map((speaker) => (
-                    <button
-                      key={speaker.deviceId}
-                      onClick={() => {
-                        call?.speaker.select(speaker.deviceId);
-                        setShowSpeakerMenu(false);
-                      }}
-                      className={cn(
-                        "text-left text-sm p-2 rounded hover:bg-dark-3 transition-colors",
-                        selectedSpeaker === speaker.deviceId ? "bg-blue-1 text-white" : "text-gray-200"
-                      )}
-                    >
-                      {speaker.label || 'Default Speaker'}
-                    </button>
-                  ))}
+                  {speakers.length > 0 ? (
+                    speakers.map((speaker) => (
+                      <button
+                        key={speaker.deviceId}
+                        onClick={() => {
+                          call?.speaker.select(speaker.deviceId);
+                          setShowSpeakerMenu(false);
+                        }}
+                        className={cn(
+                          "text-left text-sm p-2 rounded hover:bg-dark-3 transition-colors",
+                          selectedSpeaker === speaker.deviceId ? "bg-blue-1 text-white" : "text-gray-200"
+                        )}
+                      >
+                        {speaker.label || 'Default Speaker'}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="text-xs p-2 text-gray-500">No output devices found</p>
+                  )}
                 </div>
               </div>
             )}
