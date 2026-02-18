@@ -16,7 +16,8 @@ const MeetingSetup = ({
   setIsSetupComplete: (value: boolean) => void;
 }) => {
   // https://getstream.io/video/docs/react/guides/call-and-participant-state/#call-state
-  const { useCallEndedAt, useCallStartsAt } = useCallStateHooks();
+  const { useCallEndedAt, useCallStartsAt, useSpeakerState } = useCallStateHooks();
+  const { devices: speakers, selectedDevice: selectedSpeaker } = useSpeakerState();
   const callStartsAt = useCallStartsAt();
   const callEndedAt = useCallEndedAt();
   const callTimeNotArrived =
@@ -74,8 +75,26 @@ const MeetingSetup = ({
         </label>
         <DeviceSettings />
       </div>
+
+      {speakers && speakers.length > 0 && (
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-sm font-medium">Select Speaker</p>
+          <select
+            className="bg-dark-3 border-none text-white p-2 rounded-md outline-none"
+            value={selectedSpeaker}
+            onChange={(e) => call.speaker.select(e.target.value)}
+          >
+            {speakers.map((speaker) => (
+              <option key={speaker.deviceId} value={speaker.deviceId}>
+                {speaker.label || 'Default Speaker'}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <Button
-        className="rounded-md bg-green-500 px-4 py-2.5"
+        className="rounded-md bg-green-500 px-4 py-2.5 mt-4"
         onClick={() => {
           call.join();
 
